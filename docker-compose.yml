@@ -9,12 +9,26 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-  web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
+  backend:
+    build: ./backend
+    command: sh -c "python3 manage.py runserver 0.0.0.0:8000"
     volumes:
-      - .:/code
+      - ./backend:/app/backend
     ports:
       - "8000:8000"
     depends_on:
       - db
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app/frontend
+      # One-way volume to use node_modules from inside image
+      - /app/frontend/node_modules
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    command: npm start
