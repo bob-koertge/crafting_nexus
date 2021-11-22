@@ -2,13 +2,15 @@ import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../api-service';
+import { useCookies } from 'react-cookie';
 
 function PatternList(props) {
 
+    const [token] = useCookies(['craftingnexus'])
     const patternClicked = pattern => evt => { props.patternClicked(pattern) }
     const editPatternClicked = pattern => evt => { props.editPatternClicked(pattern) }
     const deletePatternClicked = pattern => evt => {
-        API.deletePattern(pattern.id)
+        API.deletePattern(pattern.id, token['craftingnexus'])
             .then(() => props.deletePatternClicked(pattern))
             .catch(error => console.log(error))
     }

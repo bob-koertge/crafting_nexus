@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { API } from '../api-service';
+import { useCookies } from 'react-cookie';
 
 function PatternDetails(props) {
 
     const pattern = props.pattern;
+    const [token] = useCookies(['craftingnexus'])
     const [highlighted, setHighlighted] = useState(-1);
     const patternRate = high => evt => {
         setHighlighted(high)
     }
     const rateClicked = rate => evt => {
-        API.updatePattern(pattern.id, { rating: rate + 1 })
+        API.updatePattern(pattern.id, { rating: rate + 1 }, token['craftingnexus'])
             .then(resp => props.updatePattern(resp))
             .catch(error => console.log(error))
     }

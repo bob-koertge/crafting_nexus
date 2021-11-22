@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { API } from '../api-service';
+import { useCookies } from 'react-cookie';
 
 function PatternForm(props) {
 
     const pattern = props.pattern;
+    const [token] = useCookies(['craftingnexus'])
     const [name, setName] = useState('');
     const [description, setDescription] = useState('')
 
@@ -13,13 +15,13 @@ function PatternForm(props) {
     }, [pattern])
 
     const updatePattern = () => {
-        API.updatePattern(pattern.id, { name, description })
+        API.updatePattern(pattern.id, { name, description },  token['craftingnexus'])
             .then(resp => props.updatedPattern(resp))
             .catch(error => console.log(error))
     }
 
     const createPattern = () => {
-        API.createPattern({ name, description })
+        API.createPattern({ name, description }, token['craftingnexus'])
             .then(resp => props.createPattern(resp))
             .catch(error => console.log(error))
     }

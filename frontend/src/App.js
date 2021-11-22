@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { useCookies } from 'react-cookie';
 import { API } from './api-service';
 import PatternList from './components/pattern-list';
 import PatternDetails from './components/pattern-details';
@@ -10,13 +11,18 @@ function App() {
   const [patterns, setPatterns] = useState([]);
   const [selectedPattern, setSelectedPattern] = useState(null);
   const [editPattern, setEditPattern] = useState(null);
+  const [token] = useCookies(['craftingnexus'])
 
 
   useEffect(() => {
-    API.loadPatterns()
+    API.loadPatterns(token['craftingnexus'])
       .then(resp => setPatterns(resp))
       .catch(error => console.log(error))
   }, [])
+
+  useEffect(() => {
+    if (!token['craftingnexus']) window.location.href = '/'
+  }, [token])
 
   const loadPattern = pattern => {
     setSelectedPattern(pattern)
