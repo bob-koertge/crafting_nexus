@@ -1,13 +1,16 @@
 FROM node:16-buster
 
-WORKDIR /app/frontend
+WORKDIR /app
 
-ENV PATH /app/frontend/node_modules/.bin:$PATH
+ENV PATH /app/node_modules/.bin:$PATH
 
-COPY package.json .
+COPY package.json /app
 
 RUN npm install --silent
+RUN npm install -g jshint
+
+COPY . /app/
 
 EXPOSE 3000
 
-CMD npm start
+CMD npm start dev:watch

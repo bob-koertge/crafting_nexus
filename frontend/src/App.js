@@ -1,26 +1,80 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import { API } from './api-service';
+import PatternList from './components/pattern-list';
+import PatternDetails from './components/pattern-details';
+import PatternForm from './components/pattern-form';
 
 function App() {
+
+  const [patterns, setPatterns] = useState([]);
+  const [selectedPattern, setSelectedPattern] = useState(null);
+  const [editPattern, setEditPattern] = useState(null);
+
+
+  useEffect(() => {
+    API.loadPatterns()
+      .then(resp => setPatterns(resp))
+      .catch(error => console.log(error))
+  }, [])
+
+  const loadPattern = pattern => {
+    setSelectedPattern(pattern)
+    setEditPattern(null)
+  }
+
+  const editPatternClicked = pattern => {
+    setEditPattern(pattern)
+    setSelectedPattern(null)
+  }
+
+  const deletePatternClicked = pattern => {
+    const newPatterns = patterns.filter(pat => pat.id !== pattern.id)
+    setPatterns(newPatterns)
+  }
+
+  const updatedPattern = pattern => {
+    const newPatterns = patterns.map(pat => {
+      if (pat.id === pattern.id) {
+        return pattern
+      }
+      return pat
+    })
+    setPatterns(newPatterns)
+    loadPattern(pattern)
+  }
+
+  const newPattern = () => {
+    setEditPattern({})
+    setSelectedPattern(null)
+  }
+
+  const createPattern = pattern => {
+    const newPatterns = [...patterns, pattern];
+    setPatterns(newPatterns)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Crafting Nexus</h1>
       </header>
+      <div className="layout">
+        <div>
+          <button onClick={newPattern}>Add New Pattern</button>
+          <PatternList
+            patterns={patterns}
+            patternClicked={loadPattern}
+            editPatternClicked={editPatternClicked}
+            deletePatternClicked={deletePatternClicked} />
+        </div>
+        <PatternDetails pattern={selectedPattern} updatePattern={updatedPattern} />
+        {editPattern ?
+          <PatternForm pattern={editPattern} updatedPattern={updatedPattern} createPattern={createPattern} />
+          : null}
+      </div>
     </div>
   );
-}
+};
 
 export default App;

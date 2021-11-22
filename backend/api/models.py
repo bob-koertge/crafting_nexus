@@ -1,6 +1,7 @@
 from enum import unique
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator 
 
 
 class PatternVariations(models.Model):
@@ -47,13 +48,14 @@ class PatternSizes(models.Model):
 
 
 class Pattern(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    description = models.TextField(max_length=2000)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=50, blank=True)
+    description = models.TextField(max_length=2000, blank=True)
     pattern_categories = models.ManyToManyField(
         PatternCategory, blank=True, related_name='categories')
     pattern_sizes = models.ManyToManyField(PatternSizes, blank=True)
     pattern_variations = models.ManyToManyField(PatternVariations, blank=True)
+    rating = models.PositiveIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(4)])
 
     class Meta:
         unique_together = (('user', 'name'),)
