@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { useCookies } from 'react-cookie';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { API } from './api-service';
 import PatternList from './components/pattern-list';
 import PatternDetails from './components/pattern-details';
@@ -11,7 +13,7 @@ function App() {
   const [patterns, setPatterns] = useState([]);
   const [selectedPattern, setSelectedPattern] = useState(null);
   const [editPattern, setEditPattern] = useState(null);
-  const [token] = useCookies(['craftingnexus'])
+  const [token, , deleteToken] = useCookies(['craftingnexus'])
 
 
   useEffect(() => {
@@ -60,10 +62,15 @@ function App() {
     setPatterns(newPatterns)
   }
 
+  const logoutUser = () => {
+    deleteToken(['craftingnexus'])
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Crafting Nexus</h1>
+        <FontAwesomeIcon icon={faSignOutAlt} onClick={logoutUser}/>
       </header>
       <div className="layout">
         <div>
