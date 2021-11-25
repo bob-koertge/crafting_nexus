@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API } from '../api-service';
 import { useCookies } from 'react-cookie';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Auth() {
 
