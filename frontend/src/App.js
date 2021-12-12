@@ -2,29 +2,28 @@ import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
+
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew";
 import HandymanIcon from "@mui/icons-material/Handyman";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
-import Button from "@mui/material/Button";
+
+import UINavDrawer from "./UI/app_drawers";
+import UIAppBar from "./UI/app_bar";
+import UIAppBody from "./UI/app_body";
 
 const drawerWidth = 240;
 
 function App(props) {
-  const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [token, , deleteToken] = useCookies(["craftingnexus"]);
   const navigate = useNavigate();
@@ -46,25 +45,25 @@ function App(props) {
       <Toolbar />
       <Divider />
       <List>
-        <ListItem button key="Projects">
+        <ListItem button key="Projects" component="a" href="/projects">
           <ListItemIcon>
             <HandymanIcon />
           </ListItemIcon>
-          <ListItemText primary="Projects" />
+          <ListItemText primary="Projects"/>
         </ListItem>
         <ListItem button key="Patterns" component="a" href="/patterns">
           <ListItemIcon>
             <LibraryBooksIcon />
           </ListItemIcon>
-          <ListItemText primary="Patterns" />
+          <ListItemText primary="Sewing Patterns" />
         </ListItem>
-        <ListItem button key="Fabrics">
+        <ListItem button key="Fabrics" component="a" href="/fabrics">
           <ListItemIcon>
             <ContentCutIcon />
           </ListItemIcon>
-          <ListItemText primary="Fabrics" />
+          <ListItemText primary="Fabric Stash" />
         </ListItem>
-        <ListItem button key="Measurements">
+        <ListItem button key="Measurements" component="a" href="/measurements">
           <ListItemIcon>
             <AccessibilityNewIcon />
           </ListItemIcon>
@@ -74,84 +73,22 @@ function App(props) {
     </div>
   );
 
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
-
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Main App
-          </Typography>
-          <Button color="inherit" onClick={logoutUser}>
-            Logout
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Toolbar />
+      <UIAppBar
+        drawerWidth={drawerWidth}
+        handleDrawerToggle={handleDrawerToggle}
+        logoutUser={logoutUser}
+        barLinks={{ title: "Main App" }}
+      />
+      <UINavDrawer
+        drawer={drawer}
+        mobileOpen={mobileOpen}
+        handleDrawerToggle={handleDrawerToggle}
+        drawerWidth={drawerWidth}
+      />
+      <UIAppBody drawerWidth={drawerWidth}>
         <Typography paragraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
@@ -181,7 +118,7 @@ function App(props) {
           eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
           posuere sollicitudin aliquam ultrices sagittis orci a.
         </Typography>
-      </Box>
+      </UIAppBody>
     </Box>
   );
 }

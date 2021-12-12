@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -17,13 +13,15 @@ import PatternGrid from "./pattern_grid";
 import PatternDetails from "./pattern_detail";
 import PatternForm from "./pattern_form";
 import PatternTreeView from "./pattern_tree_view";
-import UIDrawer from "../UI/app_drawers";
+import UINavDrawer from "../UI/app_drawers";
+import UIAppBar from "../UI/app_bar";
+import UIAppBody from "../UI/app_body";
 
 const drawerWidth = 240;
 
-function Patterns(props) {
+function Patterns() {
   const [mobileOpen, setMobileOpen] = useState(false);
-
+  
   const [isDetailView, setIsDetailView] = useState(false);
   const [isFormView, setIsFormView] = useState(false);
   const [isGridView, setIsGridView] = useState(true);
@@ -69,12 +67,6 @@ function Patterns(props) {
     setIsGridView(false);
   };
 
-  const handleGridView = () => {
-    setIsGridView(true);
-    setIsDetailView(false);
-    setIsFormView(false);
-  };
-
   const logoutUser = () => {
     deleteToken(["craftingnexus"]);
   };
@@ -108,56 +100,26 @@ function Patterns(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+      <UIAppBar
+        drawerWidth={drawerWidth}
+        handleDrawerToggle={handleDrawerToggle}
+        logoutUser={logoutUser}
+        barLinks={{
+          title: "Sewing Patterns",
+          links: [
+            { name: "Main Menu", href: "/app" },
+            { name: "View all Patterns", href: "/patterns" },
+          ],
         }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Patterns
-          </Typography>
-          <Button color="inherit" component="a" href="/app">
-            Main Menu
-          </Button>
-          {isDetailView ? (
-            <Button color="inherit" onClick={handleGridView}>
-              View all Patterns
-            </Button>
-          ) : null}
-
-          <Button color="inherit" onClick={logoutUser}>
-            Logout
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <UIDrawer
+      />
+      <UINavDrawer
         drawer={drawer}
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
         drawerWidth={drawerWidth}
       />
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Toolbar />
-        {isFormView ? (
+      <UIAppBody drawerWidth={drawerWidth} >
+         {isFormView ? (
           <PatternForm
             publishers={publishers}
             sizes={sizes}
@@ -172,7 +134,7 @@ function Patterns(props) {
             patternClicked={clickedPattern}
           />
         ) : null}
-      </Box>
+      </UIAppBody>
     </Box>
   );
 }

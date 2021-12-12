@@ -2,7 +2,7 @@ import React from "react";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 
-function UIDrawer(props) {
+function UINavDrawer(props) {
   const { window, mobileOpen, handleDrawerToggle, drawer, drawerWidth } = props;
 
   const container =
@@ -49,4 +49,4 @@ function UIDrawer(props) {
   );
 }
 
-export default UIDrawer;
+export default UINavDrawer;
