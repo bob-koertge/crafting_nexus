@@ -1,34 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import './index.css';
-import App from './App';
-import Auth from './components/auth'
-import reportWebVitals from './reportWebVitals';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
-import { CookiesProvider } from 'react-cookie';
+import App from './App';
+import Patterns from './patterns/patterns'
+import LandingPage from './pages/landing_page';
+import Auth from './auth/auth';
+import reportWebVitals from './reportWebVitals';
 
-
-function Router() {
-
-  return (
-    <React.StrictMode>
-      <CookiesProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route exact path="/" element={<Auth />} />
-            <Route exact path="/app" element={<App />} />
-          </Routes>
-        </BrowserRouter>
-      </CookiesProvider>
-    </React.StrictMode>
-  )
-}
-
-ReactDOM.render(<Router />, document.getElementById('root'));
+ReactDOM.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <Routes>
+        <Route exact path="/auth" element={<Auth />} />
+        <Route path="/app" element={<App />} />
+        <Route path="/patterns" element={<Patterns />} />
+        <Route path="*" element={<LandingPage />} />=
+      </Routes>
+    </BrowserRouter>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

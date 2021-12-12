@@ -23,6 +23,38 @@ export class API {
             }
         }).then(resp => resp.json())
     }
+
+    static loadPublishers(token) {
+        return fetch(`${HOSTNAME}/api/pattern/publishers/`, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': `Token ${token}`
+            }
+        }).then(resp => resp.json())
+    }
+
+    static loadCategories(token) {
+        return fetch(`${HOSTNAME}/api/pattern/categories/`, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': `Token ${token}`
+            }
+        }).then(resp => resp.json())
+    }
+
+    static loadSizes(token) {
+        return fetch(`${HOSTNAME}/api/pattern/sizes/`, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': `Token ${token}`
+            }
+        }).then(resp => resp.json())
+    }
+
+
     static createPattern(body, token) {
         return fetch(`${HOSTNAME}/api/patterns/`, {
             method: 'POST',
