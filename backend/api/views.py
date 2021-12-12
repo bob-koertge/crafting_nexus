@@ -5,10 +5,22 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import MethodNotAllowed
 
 from django.contrib.auth.models import User
-from .models import Pattern, Publisher, PatternTuturials
-from .serializers import PatternSerializer, PublisherSerializer, UserSerializer, PatternTutorialSerializer
+from .models import Pattern, PatternCategory, Publisher, PatternTuturials, PatternSizes
+from .serializers import PatternSizesSerializer, PatternCategoriesSerializer, PatternSerializer, PublisherSerializer, UserSerializer, PatternTutorialSerializer
 
+class PatternSizeViewSet(viewsets.ModelViewSet):
+    serializer_class = PatternSizesSerializer
+    queryset = PatternSizes.objects.all()
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
 
+class PatternCategoriesViewSet(viewsets.ModelViewSet):
+    serializer_class = PatternCategoriesSerializer
+    queryset = PatternCategory.objects.all()
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+
+    
 class PatternViewSet(viewsets.ModelViewSet):
     serializer_class = PatternSerializer
     #queryset = Pattern.objects.all()
